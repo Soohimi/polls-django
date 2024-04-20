@@ -9,7 +9,7 @@ class Question(models.Model):
     publish_date = models.DateTimeField("date published")
 
     def __str__(self):
-        return 'Question==' + self.question_text + ' | Date==' + self.publish_date
+        return 'Question==' + self.question_text + ' | Date==' + self.publish_date.strftime("%m/%d/%Y, %H:%M:%S")
     
     def was_published_recently(self):
         return self.publish_date >= timezone.now() - datetime.timedelta(days=1)
@@ -20,4 +20,4 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
 
     def __str__(self):
-        return 'Choice==' + self.choice + ' | Votes==' + self.votes
+        return 'Choice==' + self.choice + ' | Votes==' + str(self.votes)
