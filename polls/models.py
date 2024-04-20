@@ -11,6 +11,7 @@ class Question(models.Model):
     def __str__(self):
         return 'Question==' + self.question_text + ' | Date==' + self.publish_date.strftime("%m/%d/%Y, %H:%M:%S")
     
+    @property
     def was_published_recently(self):
         return self.publish_date >= timezone.now() - datetime.timedelta(days=1)
 
