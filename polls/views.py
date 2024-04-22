@@ -10,7 +10,7 @@ from .models import Question,Choice
 
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
-    context_object_name="latest_question_list"
+    context_object_name="question_list"
 
     def get_queryset(self):
         return Question.objects.order_by("-publish_date")[:5]
