@@ -4,12 +4,9 @@ from django.template import loader
 from .models import Question
 
 def index(request):
-    question_list = Question.objects.order_by("-pub_date")[:5]
-    template = loader.get_template("polls/index.html")
-    context = {
-        "question_list": question_list,
-    }
-    return HttpResponse(template.render(context,request))
+    question_list = Question.objects.order_by("-publish_date")[:5]
+    context = {"question_list": question_list}
+    return render(request, "polls/index.html", context)
 
 def detail(req, question_id):
     return HttpResponse("Question number %s." %question_id)
