@@ -1,15 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.template import loader
+from django.http import HttpResponse,Http404
+
 from .models import Question
 
-def index(request):
+
+def index(req):
     question_list = Question.objects.order_by("-publish_date")[:5]
-    context = {"question_list": question_list}
-    return render(request, "polls/index.html", context)
+    return render(req, "polls/index.html", {"question_list": question_list})
 
 def detail(req, question_id):
-    return HttpResponse("Question number %s." %question_id)
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")    
+    return render(req, "polls/detail.html",{"question":question})
 
 def results(req, question_id):
     response = "Here's the result of question %s."
