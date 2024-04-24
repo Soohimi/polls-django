@@ -30,7 +30,7 @@ def vote(req, question_id):
     except (KeyError,Choice.DoesNotExist):
         return render(req,"polls/detail.html",
                       {"question": question,"error_message": "You did not select a choice!",},
-                    )  
+                    ) 
     else:
         selected_choice.votes=F("votes") + 1
         selected_choice.save()
