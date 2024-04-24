@@ -27,7 +27,7 @@ class QuestionModelTests(TestCase):
 def create_question(question_text, days):
     #Creates a question 
     time = timezone.now() + datetime.timedelta(days=days)
-    return Question.objects.create(question_text=question_text, pub_date=time)
+    return Question.objects.create(question_text=question_text, publish_date=time)
 
 class QuestionIndexViewTests(TestCase):
     #Test case for scenarios where no questions exist and an appropriate message must be shown.
@@ -36,5 +36,11 @@ class QuestionIndexViewTests(TestCase):
         self.assertEqual(response.status_code,200)
         self.assertContains(response,"No polls are available.")
         self.assertQuerySetEqual(response.context["question_list"],[])
+
+    #Test case for scenarios where past questions exist and they must be displayed.
+    def test_past_question(self):
+        question = create_question(question_text="Past question.", days=-30)
+        response = self.client.get(reverse("polls:index"))
+        self.assertQuerySetEqual(response.context["question_list"],[question])
 
         
