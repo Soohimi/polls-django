@@ -43,4 +43,31 @@ class QuestionIndexViewTests(TestCase):
         response = self.client.get(reverse("polls:index"))
         self.assertQuerySetEqual(response.context["question_list"],[question])
 
+    #Test case for scenarios where future questions exist and they should not be displayed.
+    def test_future_question(self):
+        create_question(question_text="Future question.", days=30)
+        response = self.client.get(reverse("polls:index"))
+        self.assertContains(response, "No polls are available.")
+        self.assertQuerySetEqual(response.context["question_list"],[])
+
+    #Test case for scenarios where both past and future questions exist and only the past ones should be displayed
+    def test_future_and_past_question(self):
+        question = create_question(question_text="Past question.", days=-30)
+        create_question(question_text="Future question.", days=30)
+        response = self.client.get(reverse("polls:index"))
+        self.assertQuerySetEqual(
+            response.context["question_list"],
+            [question],
+        )
+
+    #Test case for more than one questions to be displayed    
+    def test_two_past_questions(self):
+        question1 = create_question(question_text="First past question.", days=-30)
+        question2 = create_question(question_text="Second past question.", days=-5)
+        response = self.client.get(reverse("polls:index"))
+        self.assertQuerySetEqual(
+            response.context["question_list"],
+            [question2, question1],
+        )
+
         
