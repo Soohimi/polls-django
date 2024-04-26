@@ -10,11 +10,12 @@ class Question(models.Model):
 
     def __str__(self):
         return 'Question==' + self.question_text + ' | Date==' + self.publish_date.strftime("%m/%d/%Y, %H:%M:%S")
-    
+
     @property
     def was_published_recently(self):
         now = timezone.now()
-        return   now - datetime.timedelta(days=1) <= self.publish_date <= now
+        return now - datetime.timedelta(days=1) <= self.publish_date <= now
+
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
